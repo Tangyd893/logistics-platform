@@ -1,0 +1,97 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+
+spring:
+  application:
+    name: logistics-backend
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:logistics}
+    username: ${DB_USER:logistics_user}
+    password: ${DB_PASSWORD:logistics_pass}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 5000
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.logistics.**.domain.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: true
+      logic-not-delete-value: false
+
+# JWT 配置
+jwt:
+  secret: ${JWT_SECRET:your-jwt-secret-at-least-32-characters-long}
+  expiration: ${JWT_EXPIRATION:7200000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+# RocketMQ 配置
+rocketmq:
+  namesrv-addr: ${ROCKETMQ_NAMESRV_ADDR:localhost:9876}
+  broker-addr: ${ROCKETMQ_BROKER_ADDR:localhost:8080}
+
+# MinIO 配置
+minio:
+  endpoint: ${MINIO_ENDPOINT:localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadmin}
+  bucket: ${MINIO_BUCKET:logistics}
+
+# 日志配置
+logging:
+  level:
+    com.logistics: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# SpringDoc 配置
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true

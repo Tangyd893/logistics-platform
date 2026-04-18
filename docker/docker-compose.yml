@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: logistics_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: logistics
+      POSTGRES_USER: logistics_user
+      POSTGRES_PASSWORD: logistics_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U logistics_user -d logistics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: logistics_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    mem_limit: 256m
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: logistics_minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - ./minio_data:/data
+    mem_limit: 300m
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.3.0
+    container_name: logistics_rocketmq_namesrv
+    restart: unless-stopped
+    ports:
+      - "9876:9876"
+    environment:
+      JAVA_OPTS: "-Xms200m -Xmx200m"
+    volumes:
+      - ./rocketmq_data/namesrv:/home/rocketmq/rocketmq-5.3.0/namesrv/logs
+    mem_limit: 200m
+    command: sh mqnamesrv
+
+  rocketmq-broker:
+    image: apache/rocketmq:5.3.0
+    container_name: logistics_rocketmq_broker
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "10911:10911"
+    environment:
+      JAVA_OPTS: "-Xms768m -Xmx768m"
+      ROCKETMQ_HOME: /home/rocketmq/rocketmq-5.3.0
+    volumes:
+      - ./rocketmq_data/broker:/home/rocketmq/rocketmq-5.3.0/broker/logs
+    mem_limit: 768m
+    depends_on:
+      - rocketmq-namesrv
+    command: sh mqbroker -n rocketmq-namesrv:9876 -c ../conf/broker.conf
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  rocketmq_data:
