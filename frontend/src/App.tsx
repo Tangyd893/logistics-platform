@@ -4,7 +4,9 @@ import Login from '@/pages/Login'
 import Layout from '@/pages/layout/Layout'
 import Dashboard from '@/pages/Dashboard'
 import WarehouseList from '@/pages/warehouse/WarehouseList'
+import WarehouseDetail from '@/pages/warehouse/WarehouseDetail'
 import OrderList from '@/pages/order/OrderList'
+import OrderCreate from '@/pages/order/OrderCreate'
 import TransportList from '@/pages/transport/TransportList'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import SystemPage from '@/pages/system/SystemPage'
@@ -30,7 +32,9 @@ export default function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="warehouse" element={<WarehouseList />} />
+          <Route path="warehouse/:tab" element={<WarehouseDetail />} />
           <Route path="order" element={<OrderList />} />
+          <Route path="order/new" element={<OrderCreate />} />
           <Route path="transport" element={<TransportList />} />
           <Route path="statistics" element={<StatisticsPage />} />
           <Route path="system" element={<SystemPage />} />
