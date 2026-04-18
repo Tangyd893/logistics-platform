@@ -44,7 +44,7 @@ public class OOrderItem {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 
-    @TableLogic
+    @TableField(exist = false)
     private Boolean deleted;
 
     // ==================== Getters and Setters ====================

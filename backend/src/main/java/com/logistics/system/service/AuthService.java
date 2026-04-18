@@ -1,5 +1,6 @@
 package com.logistics.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.logistics.common.exception.BusinessException;
 import com.logistics.system.domain.dto.LoginRequest;
 import com.logistics.system.domain.dto.LoginResponse;
@@ -47,8 +48,10 @@ public class AuthService {
             String accessToken = tokenProvider.generateAccessToken(authentication);
             String refreshToken = tokenProvider.generateRefreshToken(request.getUsername());
 
-            SysUser user = userRepository.findByUsername(request.getUsername())
-                    .orElseThrow(() -> new BusinessException("用户不存在"));
+            SysUser user = findByUsername(request.getUsername());
+            if (user == null) {
+                throw new BusinessException("用户不存在");
+            }
 
             LoginResponse.UserInfo userInfo = new LoginResponse.UserInfo(
                     user.getId(),
@@ -89,8 +92,10 @@ public class AuthService {
         }
 
         String username = tokenProvider.getUsernameFromToken(refreshToken);
-        SysUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new BusinessException("用户不存在"));
+        SysUser user = findByUsername(username);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, user.getPassword())
@@ -108,5 +113,11 @@ public class AuthService {
         );
 
         return new LoginResponse(newAccessToken, newRefreshToken, tokenProvider.getExpirationSeconds(), userInfo);
+    }
+
+    private SysUser findByUsername(String username) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername, username);
+        return userRepository.selectOne(wrapper);
     }
 }

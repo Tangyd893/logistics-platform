@@ -60,6 +60,7 @@ public class OOrder {
     private String remark;
 
     /** 创建人 */
+    @TableField(exist = false)
     private Long createdBy;
 
     @TableField(fill = FieldFill.INSERT)
@@ -68,11 +69,11 @@ public class OOrder {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
-    @TableField(fill = FieldFill.INSERT)
-    private String createdBySys;
+    @TableField(value = "created_by", fill = FieldFill.INSERT)
+    private String createdByStr;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updatedBySys;
+    @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
+    private String updatedByStr;
 
     @TableLogic
     private Boolean deleted;
@@ -130,11 +131,11 @@ public class OOrder {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    public String getCreatedBySys() { return createdBySys; }
-    public void setCreatedBySys(String createdBySys) { this.createdBySys = createdBySys; }
+    public String getCreatedByStr() { return createdByStr; }
+    public void setCreatedByStr(String createdByStr) { this.createdByStr = createdByStr; }
 
-    public String getUpdatedBySys() { return updatedBySys; }
-    public void setUpdatedBySys(String updatedBySys) { this.updatedBySys = updatedBySys; }
+    public String getUpdatedByStr() { return updatedByStr; }
+    public void setUpdatedByStr(String updatedByStr) { this.updatedByStr = updatedByStr; }
 
     public Boolean getDeleted() { return deleted; }
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }

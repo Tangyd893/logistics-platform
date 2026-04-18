@@ -70,7 +70,8 @@ public class SysUserService {
      */
     @Transactional
     public UserVO create(UserCreateRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.selectCount(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getUsername, request.getUsername())) > 0) {
             throw new BusinessException("用户名已存在");
         }
 
