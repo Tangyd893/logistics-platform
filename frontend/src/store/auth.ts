@@ -4,7 +4,8 @@ interface User {
   id: number
   username: string
   displayName: string
-  roles: string[]
+  roleCode: string
+  avatar: string | null
 }
 
 interface AuthState {

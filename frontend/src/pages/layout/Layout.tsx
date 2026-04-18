@@ -57,7 +57,7 @@ export default function Layout() {
         {/* 底部用户信息 */}
         <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem', fontWeight: 'bold' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem', fontWeight: 'bold', flexShrink: 0 }}>
               {user?.displayName?.[0] || 'U'}
             </div>
             {!collapsed && (
@@ -65,7 +65,7 @@ export default function Layout() {
                 <div style={{ color: 'white', fontSize: '0.8rem', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {user?.displayName || '用户'}
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>{user?.username}</div>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>{user?.roleCode === 'ADMIN' ? '管理员' : user?.username}</div>
               </div>
             )}
           </div>

@@ -9,7 +9,8 @@ interface LoginVO {
     id: number
     username: string
     displayName: string
-    roles: string[]
+    roleCode: string
+    avatar: string | null
   }
 }
 
@@ -78,7 +79,7 @@ export default function Login() {
           </button>
         </form>
         <div style={{ marginTop: '1.5rem', padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '0.375rem', fontSize: '0.8rem', color: '#64748b' }}>
-          演示账号：admin / admin
+          演示账号：admin / admin123
         </div>
       </div>
     </div>
