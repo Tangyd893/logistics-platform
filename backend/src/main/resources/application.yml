@@ -70,8 +70,7 @@ jwt:
 
 # RocketMQ 配置
 rocketmq:
-  namesrv-addr: ${ROCKETMQ_NAMESRV_ADDR:localhost:9876}
-  broker-addr: ${ROCKETMQ_BROKER_ADDR:localhost:8080}
+  name-server: ${ROCKETMQ_NAMESRV_ADDR:localhost:9876}
 
 # MinIO 配置
 minio:
