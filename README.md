@@ -2,7 +2,7 @@
 
 > 基于 Spring Boot 3 + React 18 的中小型物流企业综合管理平台
 
-**技术栈**：Spring Boot 3 · Java 21 · PostgreSQL 16 · Redis 7 · RocketMQ 5.x · React 18 + Vite · TypeScript · Tailwind CSS
+**技术栈**：Spring Boot 3 · Java 21 · PostgreSQL 16 · Redis 7 · RocketMQ 5.x · React 18 · Vite · TypeScript · Tailwind CSS
 
 ---
 
