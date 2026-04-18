@@ -1,0 +1,52 @@
+# Built files
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Logs
+logs/
+*.log
+
+# Environment - 永远不传真实密钥
+.env
+.env.local
+.env.*.local
+application-local.yml
+application-local.properties
+
+# Docker 密钥相关
+docker/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# PostgreSQL / Redis 数据
+pgdata/
+redisdata/
+
+# MinIO 数据
+minio-data/
+
+# RocketMQ 数据
+rocketmq-data/
+
+# Test coverage
+jacoco/
+*.exec
+
+# OpenClaw workspace (个人工作文件)
+.claw/
+state/
+memory/
