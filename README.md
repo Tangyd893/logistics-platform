@@ -29,6 +29,8 @@
 | Node.js | 18+ |
 | Docker | 24+ |
 
+> ⚠️ 本项目在 4核8G 虚拟机环境下开发，调试前请先 `pkill -f logistics-backend` 杀掉残留进程。
+
 ### 步骤一：启动基础设施
 
 ```bash
@@ -37,21 +39,35 @@ docker compose up -d postgres redis minio rocketmq-namesrv rocketmq-broker
 
 # 确认服务状态
 docker ps --filter "name=logistics"
+# 应显示：logistics_postgres / logistics_redis / logistics_minio / logistics_rocketmq_namesrv / logistics_rocketmq_broker
 ```
 
-### 步骤二：启动后端
+### 步骤二：编译并启动后端
 
 ```bash
 cd backend
+
+# 编译（首次或代码变更后）
 mvn clean package -DskipTests -q
+
+# 启动（后台运行）
 java -Xms768m -Xmx768m -Xss512k -jar target/logistics-backend-1.0.0.jar &
+
+# 等待启动（约30秒），验证
+curl http://localhost:8080/  # 返回 403 表示启动成功
 ```
 
-### 步骤三：启动前端
+> 💡 启动失败时查看日志：`tail -50 /tmp/logistics-backend.log`
+
+### 步骤三：安装并启动前端
 
 ```bash
 cd frontend
+
+# 安装依赖（首次）
 npm install
+
+# 启动开发服务器
 npm run dev -- --port 3000
 ```
 
@@ -63,14 +79,47 @@ npm run dev -- --port 3000
 |------|------|------|
 | 后端 API | 8080 | Spring Boot + Tomcat |
 | 前端 | 3000 | Vite 开发服务器 |
-| PostgreSQL | 5432 | Docker |
+| PostgreSQL | 5432 | Docker，密码：`logistics_pass` |
 | Redis | 6379 | Docker |
-| MinIO API | 9000 | Docker |
+| MinIO API | 9000 | Docker，账号密码：`minioadmin` |
 | MinIO Console | 9001 | Docker |
 | RocketMQ NameServer | 9876 | Docker |
 | RocketMQ Broker | 10811 | Docker remoting 端口 |
 
-> ⚠️ RocketMQ Broker 使用端口 **10811**（非默认 8080，避免与后端冲突）
+> ⚠️ RocketMQ Broker 使用 **10811**（非默认 8080），broker.conf 在 `docker/rocketmq_data/broker/broker.conf`
+
+### 停止所有服务
+
+```bash
+# 停止后端
+pkill -f logistics-backend
+
+# 停止 Docker 基础设施
+cd docker && docker compose stop
+
+# 或完全清理（包括数据）
+cd docker && docker compose down -v
+```
+
+### 重新部署
+
+```bash
+# 1. 拉取最新代码
+git pull origin master
+
+# 2. 重启基础设施
+cd docker && docker compose restart
+
+# 3. 重新编译后端
+cd backend && mvn clean package -DskipTests -q
+
+# 4. 重启后端
+pkill -f logistics-backend
+java -Xms768m -Xmx768m -Xss512k -jar target/logistics-backend-1.0.0.jar &
+
+# 5. 重启前端
+cd frontend && npm run dev -- --port 3000
+```
 
 ---
 
@@ -138,6 +187,7 @@ logistics-platform/
 | 04 | 接口设计说明书 |
 | 05 | 测试计划说明书 |
 | 06 | **项目完成状态** ← 当前进展 |
+| 07 | **RocketMQ工作流程** ← 消息队列设计与调试 |
 | 08 | 人机协作工作流 |
 | - | **RocketMQ问题记录** ← 必读 |
 

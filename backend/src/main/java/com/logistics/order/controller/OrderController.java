@@ -48,7 +48,7 @@ public class OrderController {
         return Result.ok(orderService.getById(id));
     }
 
-    @GetMapping("/{orderNo}")
+    @GetMapping("/no/{orderNo}")
     @Operation(summary = "根据订单号查询")
     public Result<OrderVO> getByOrderNo(@PathVariable String orderNo) {
         return Result.ok(orderService.getByOrderNo(orderNo));
