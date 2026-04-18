@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader, Card, Table, Badge } from '@/components/Table'
 import api, { ResultDTO, PageDTO } from '@/lib/api'
 
@@ -49,6 +50,7 @@ const statusMap: Record<number, { label: string; variant: 'success' | 'warning' 
 export default function OrderList() {
   const [data, setData] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     api.get<ResultDTO<PageDTO<Order>>>('/order/orders').then((res) => {
@@ -58,7 +60,7 @@ export default function OrderList() {
 
   const columns = [
     { key: 'id', label: 'ID', width: '50px' },
-    { key: 'orderNo', label: '订单号', width: '170px' },
+    { key: 'orderNo', label: '订单号', width: '170px', render: (row: Order) => <span style={{ color: '#3b82f6', cursor: 'pointer', fontWeight: 500 }} onClick={() => navigate(`/order/${row.id}`)}>{row.orderNo}</span> },
     { key: 'senderName', label: '发货人' },
     { key: 'senderPhone', label: '发货电话', width: '115px' },
     { key: 'receiverName', label: '收货人' },

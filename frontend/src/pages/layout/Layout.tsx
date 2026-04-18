@@ -5,8 +5,11 @@ import { useAuthStore } from '@/store/auth'
 const menuItems = [
   { path: '/', label: '首页概览', icon: '📊' },
   { path: '/warehouse', label: '仓库管理', icon: '🏭' },
+  { path: '/warehouse/inventory', label: '库存查询', icon: '📋' },
   { path: '/order', label: '订单管理', icon: '📦' },
-  { path: '/transport', label: '运输管理', icon: '🚚' },
+  { path: '/transport', label: '运单管理', icon: '🚚' },
+  { path: '/transport/drivers', label: '司机管理', icon: '👤' },
+  { path: '/transport/vehicles', label: '车辆管理', icon: '🚛' },
   { path: '/statistics', label: '数据统计', icon: '📈' },
   { path: '/system', label: '系统管理', icon: '⚙️' },
 ]

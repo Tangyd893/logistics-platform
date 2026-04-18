@@ -5,9 +5,13 @@ import Layout from '@/pages/layout/Layout'
 import Dashboard from '@/pages/Dashboard'
 import WarehouseList from '@/pages/warehouse/WarehouseList'
 import WarehouseDetail from '@/pages/warehouse/WarehouseDetail'
+import InventoryPage from '@/pages/warehouse/InventoryPage'
 import OrderList from '@/pages/order/OrderList'
 import OrderCreate from '@/pages/order/OrderCreate'
+import OrderDetail from '@/pages/order/OrderDetail'
 import TransportList from '@/pages/transport/TransportList'
+import DriverPage from '@/pages/transport/DriverPage'
+import VehiclePage from '@/pages/transport/VehiclePage'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import SystemPage from '@/pages/system/SystemPage'
 
@@ -32,10 +36,15 @@ export default function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="warehouse" element={<WarehouseList />} />
-          <Route path="warehouse/:tab" element={<WarehouseDetail />} />
+          <Route path="warehouse/inbound" element={<WarehouseDetail />} />
+          <Route path="warehouse/outbound" element={<WarehouseDetail />} />
+          <Route path="warehouse/inventory" element={<InventoryPage />} />
           <Route path="order" element={<OrderList />} />
           <Route path="order/new" element={<OrderCreate />} />
+          <Route path="order/:id" element={<OrderDetail />} />
           <Route path="transport" element={<TransportList />} />
+          <Route path="transport/drivers" element={<DriverPage />} />
+          <Route path="transport/vehicles" element={<VehiclePage />} />
           <Route path="statistics" element={<StatisticsPage />} />
           <Route path="system" element={<SystemPage />} />
         </Route>
