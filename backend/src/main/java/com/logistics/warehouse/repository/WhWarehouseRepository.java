@@ -1,0 +1,9 @@
+package com.logistics.warehouse.repository;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.logistics.warehouse.domain.entity.WhWarehouse;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface WhWarehouseRepository extends BaseMapper<WhWarehouse> {
+}
