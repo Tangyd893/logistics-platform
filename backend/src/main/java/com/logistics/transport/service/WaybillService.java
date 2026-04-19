@@ -150,6 +150,8 @@ public class WaybillService {
         waybill.setVehicleId(request.getVehicleId());
         waybill.setPlanPickupTime(request.getPlanPickupTime());
         waybill.setPlanDeliveryTime(request.getPlanDeliveryTime());
+        waybill.setFromAddress(request.getFromAddress());
+        waybill.setToAddress(request.getToAddress());
         waybill.setStatus(1); // 待提货
         waybillRepository.insert(waybill);
 
@@ -349,6 +351,8 @@ public class WaybillService {
         vo.setPlanDeliveryTime(waybill.getPlanDeliveryTime());
         vo.setActualPickupTime(waybill.getActualPickupTime());
         vo.setActualDeliveryTime(waybill.getActualDeliveryTime());
+        vo.setFromAddress(waybill.getFromAddress());
+        vo.setToAddress(waybill.getToAddress());
         vo.setStatus(waybill.getStatus());
         vo.setStatusName(getStatusName(waybill.getStatus()));
         vo.setCreatedAt(waybill.getCreatedAt());

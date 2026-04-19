@@ -23,6 +23,15 @@ public class WaybillCreateRequest {
     private LocalDateTime planPickupTime;
     private LocalDateTime planDeliveryTime;
 
+    private String fromAddress;
+    private String toAddress;
+
+
+    public String getFromAddress() { return fromAddress; }
+    public void setFromAddress(String fromAddress) { this.fromAddress = fromAddress; }
+    public String getToAddress() { return toAddress; }
+    public void setToAddress(String toAddress) { this.toAddress = toAddress; }
+
     public WaybillCreateRequest() {}
 
     public Long getOrderId() { return orderId; }

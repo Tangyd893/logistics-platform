@@ -25,6 +25,8 @@ public class WaybillVO {
     private LocalDateTime actualDeliveryTime;
     private Integer status;
     private String statusName;
+    private String fromAddress;
+    private String toAddress;
     private List<TrackingVO> trackings;
     private LocalDateTime createdAt;
 
@@ -81,6 +83,11 @@ public class WaybillVO {
 
     public String getStatusName() { return statusName; }
     public void setStatusName(String statusName) { this.statusName = statusName; }
+
+    public String getFromAddress() { return fromAddress; }
+    public void setFromAddress(String fromAddress) { this.fromAddress = fromAddress; }
+    public String getToAddress() { return toAddress; }
+    public void setToAddress(String toAddress) { this.toAddress = toAddress; }
 
     public List<TrackingVO> getTrackings() { return trackings; }
     public void setTrackings(List<TrackingVO> trackings) { this.trackings = trackings; }

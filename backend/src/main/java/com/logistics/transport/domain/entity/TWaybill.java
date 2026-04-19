@@ -46,6 +46,12 @@ public class TWaybill {
     /** 实际送达时间 */
     private LocalDateTime actualDeliveryTime;
 
+    /** 发货地址 */
+    private String fromAddress;
+
+    /** 收货地址 */
+    private String toAddress;
+
     /** 状态：1待提货 2配送中 3已送达 4拒收 */
     private Integer status;
 
@@ -95,6 +101,12 @@ public class TWaybill {
 
     public LocalDateTime getActualDeliveryTime() { return actualDeliveryTime; }
     public void setActualDeliveryTime(LocalDateTime actualDeliveryTime) { this.actualDeliveryTime = actualDeliveryTime; }
+
+    public String getFromAddress() { return fromAddress; }
+    public void setFromAddress(String fromAddress) { this.fromAddress = fromAddress; }
+
+    public String getToAddress() { return toAddress; }
+    public void setToAddress(String toAddress) { this.toAddress = toAddress; }
 
     public Integer getStatus() { return status; }
     public void setStatus(Integer status) { this.status = status; }
