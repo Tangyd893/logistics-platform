@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader, Card, Table, Badge } from '@/components/Table'
 import api, { ResultDTO, PageDTO } from '@/lib/api'
 
@@ -28,6 +29,7 @@ const statusMap: Record<number, { label: string; variant: 'success' | 'warning' 
 export default function TransportList() {
   const [data, setData] = useState<Waybill[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     api.get<ResultDTO<PageDTO<Waybill>>>('/transport/waybills').then((res) => {
@@ -50,7 +52,18 @@ export default function TransportList() {
 
   return (
     <div>
-      <PageHeader title="运输管理" subtitle="管理运输任务与跟踪" />
+      <PageHeader
+        title="运输管理"
+        subtitle="管理运输任务与跟踪"
+        action={
+          <button
+            onClick={() => navigate('/transport/new')}
+            style={{ backgroundColor: '#3b82f6', color: 'white', border: 'none', padding: '0.4rem 0.875rem', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 500 }}
+          >
+            + 新建运单
+          </button>
+        }
+      />
       <Card>
         <Table columns={columns} data={data} loading={loading} emptyText="暂无运单数据" />
       </Card>

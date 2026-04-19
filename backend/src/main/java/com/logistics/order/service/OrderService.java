@@ -15,6 +15,9 @@ import com.logistics.order.repository.OOrderRepository;
 import com.logistics.order.repository.OOrderStatusLogRepository;
 import com.logistics.system.domain.entity.SysUser;
 import com.logistics.system.repository.SysUserRepository;
+import com.logistics.common.mq.OrderWarehouseEvent;
+import com.logistics.common.mq.OrderTransportEvent;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +41,19 @@ public class OrderService {
     private final OOrderItemRepository orderItemRepository;
     private final OOrderStatusLogRepository statusLogRepository;
     private final SysUserRepository userRepository;
+    private final RocketMQTemplate rocketMQTemplate;
 
     @Autowired
     public OrderService(OOrderRepository orderRepository,
                         OOrderItemRepository orderItemRepository,
                         OOrderStatusLogRepository statusLogRepository,
-                        SysUserRepository userRepository) {
+                        SysUserRepository userRepository,
+                        RocketMQTemplate rocketMQTemplate) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.statusLogRepository = statusLogRepository;
         this.userRepository = userRepository;
+        this.rocketMQTemplate = rocketMQTemplate;
     }
 
     /**
@@ -256,7 +262,7 @@ public class OrderService {
         recordStatusLog(id, newStatus, null, remark != null ? remark : "状态变更");
 
         // 发布状态变更事件
-        publishOrderStatusChangedEvent(id, order.getOrderNo(), oldStatus, newStatus);
+        publishStatusChangedEvents(id, order.getOrderNo(), newStatus);
 
         log.info("订单状态变更: {} {} -> {}",
                 order.getOrderNo(), getStatusName(oldStatus), getStatusName(newStatus));
@@ -307,10 +313,31 @@ public class OrderService {
         log.info("[OrderEvent] 订单已创建: orderId={}, orderNo={}", orderId, orderNo);
     }
 
+    private void publishStatusChangedEvents(Long orderId, String orderNo, Integer newStatus) {
+        // 发给仓库服务：订单状态变更事件
+        try {
+            OrderWarehouseEvent warehouseEvent = new OrderWarehouseEvent(orderId, orderNo, newStatus);
+            rocketMQTemplate.convertAndSend("logistics:order:warehouse", warehouseEvent);
+            log.info("[MQ] 发送 warehouse 事件: orderNo={}, status={}", orderNo, newStatus);
+        } catch (Exception e) {
+            log.error("[MQ] 发送 warehouse 事件失败", e);
+        }
+        // 发给运输服务：订单状态变更事件
+        try {
+            OrderTransportEvent transportEvent = new OrderTransportEvent(orderId, orderNo, newStatus);
+            rocketMQTemplate.convertAndSend("logistics:order:transport", transportEvent);
+            log.info("[MQ] 发送 transport 事件: orderNo={}, status={}", orderNo, newStatus);
+        } catch (Exception e) {
+            log.error("[MQ] 发送 transport 事件失败", e);
+        }
+    }
+
     @Async
     private void publishOrderStatusChangedEvent(Long orderId, String orderNo, Integer oldStatus, Integer newStatus) {
         log.info("[OrderEvent] 订单状态变更: orderId={}, orderNo={}, {} -> {}",
                 orderId, orderNo, getStatusName(oldStatus), getStatusName(newStatus));
+        // 委托给 publishStatusChangedEvents，实际发送 MQ 消息
+        publishStatusChangedEvents(orderId, orderNo, newStatus);
     }
 
     private String generateOrderNo() {
