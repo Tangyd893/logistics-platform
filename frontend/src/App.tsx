@@ -6,11 +6,13 @@ import Dashboard from '@/pages/Dashboard'
 import WarehouseList from '@/pages/warehouse/WarehouseList'
 import WarehouseDetail from '@/pages/warehouse/WarehouseDetail'
 import InventoryPage from '@/pages/warehouse/InventoryPage'
+import LocationPage from '@/pages/warehouse/LocationPage'
 import OrderList from '@/pages/order/OrderList'
 import OrderCreate from '@/pages/order/OrderCreate'
 import OrderDetail from '@/pages/order/OrderDetail'
 import TransportList from '@/pages/transport/TransportList'
 import WaybillCreate from '@/pages/transport/WaybillCreate'
+import TrackingPage from '@/pages/transport/TrackingPage'
 import DriverPage from '@/pages/transport/DriverPage'
 import VehiclePage from '@/pages/transport/VehiclePage'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
@@ -40,11 +42,13 @@ export default function App() {
           <Route path="warehouse/inbound" element={<WarehouseDetail />} />
           <Route path="warehouse/outbound" element={<WarehouseDetail />} />
           <Route path="warehouse/inventory" element={<InventoryPage />} />
+          <Route path="warehouse/locations" element={<LocationPage />} />
           <Route path="order" element={<OrderList />} />
           <Route path="order/new" element={<OrderCreate />} />
           <Route path="order/:id" element={<OrderDetail />} />
           <Route path="transport" element={<TransportList />} />
           <Route path="transport/new" element={<WaybillCreate />} />
+          <Route path="transport/tracking" element={<TrackingPage />} />
           <Route path="transport/drivers" element={<DriverPage />} />
           <Route path="transport/vehicles" element={<VehiclePage />} />
           <Route path="statistics" element={<StatisticsPage />} />
