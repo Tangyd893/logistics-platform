@@ -317,7 +317,7 @@ public class OrderService {
         // 发给仓库服务：订单状态变更事件
         try {
             OrderWarehouseEvent warehouseEvent = new OrderWarehouseEvent(orderId, orderNo, newStatus);
-            rocketMQTemplate.convertAndSend("logistics:order:warehouse", warehouseEvent);
+            rocketMQTemplate.convertAndSend("logistics_order_warehouse", warehouseEvent);
             log.info("[MQ] 发送 warehouse 事件: orderNo={}, status={}", orderNo, newStatus);
         } catch (Exception e) {
             log.error("[MQ] 发送 warehouse 事件失败", e);
@@ -325,7 +325,7 @@ public class OrderService {
         // 发给运输服务：订单状态变更事件
         try {
             OrderTransportEvent transportEvent = new OrderTransportEvent(orderId, orderNo, newStatus);
-            rocketMQTemplate.convertAndSend("logistics:order:transport", transportEvent);
+            rocketMQTemplate.convertAndSend("logistics_order_transport", transportEvent);
             log.info("[MQ] 发送 transport 事件: orderNo={}, status={}", orderNo, newStatus);
         } catch (Exception e) {
             log.error("[MQ] 发送 transport 事件失败", e);
