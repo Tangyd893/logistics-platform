@@ -96,7 +96,17 @@ export default function TrackingPage() {
 
   useEffect(() => {
     api.get<ResultDTO<{ records: Waybill[] }>>('/transport/waybills?size=50')
-      .then((r) => { if (r.data.code === 200) setWaybills(r.data.data.records || []) })
+      .then((r) => { if (r.data.code === 200) {
+        const records = r.data.data.records || []
+        setWaybills(records)
+        // 检查是否有预选的运单 ID（从 TransportList 点击运单号传来）
+        const preselectId = sessionStorage.getItem('tracking_waybill_id')
+        if (preselectId) {
+          sessionStorage.removeItem('tracking_waybill_id')
+          const preselect = records.find((w: Waybill) => String(w.id) === preselectId)
+          if (preselect) setSelected(preselect)
+        }
+      }})
       .catch(console.error).finally(() => setLoading(false))
   }, [])
 
