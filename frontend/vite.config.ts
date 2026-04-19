@@ -19,4 +19,19 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('recharts')) return 'vendor-charts'
+            if (id.includes('leaflet') || id.includes('react-leaflet')) return 'vendor-map'
+            if (id.includes('lucide')) return 'vendor-icons'
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) return 'vendor-react'
+          }
+        },
+      },
+    },
+  },
 })
